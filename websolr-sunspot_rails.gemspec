@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{websolr-sunspot_rails}
-  s.version = "0.0.1"
+  s.version = "0.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Kyle Maxwell"]
@@ -23,7 +23,8 @@ Gem::Specification.new do |s|
      "README.rdoc",
      "Rakefile",
      "VERSION",
-     "lib/websolr-sunspot_rails.rb"
+     "lib/websolr-sunspot_rails.rb",
+     "websolr-sunspot_rails.gemspec"
   ]
   s.homepage = %q{http://github.com/fizx/websolr-sunspot_rails}
   s.rdoc_options = ["--charset=UTF-8"]

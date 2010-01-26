@@ -1,18 +1,26 @@
-= websolr-sunspot_rails
+= websolr-rails
 
-Description goes here.
+This overrides Sunspot to use the value of the environment variable 
+WEBSOLR_URL as the Solr Search server, provided that it's defined.
 
-== Note on Patches/Pull Requests
- 
-* Fork the project.
-* Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but
-   bump version in a commit by itself I can ignore when I pull)
-* Send me a pull request. Bonus points for topic branches.
+After installing the gem, you can include websolr-rails in your 
+app by either starting the webapp like:
+
+  WEBSOLR_URL=http://index.websolr.com/solr/<api-key> ./script/server
+  
+Or, you can put the following in /environment/production.rb, or an
+initializer, etc:
+
+  # production.rb
+  ENV["WEBSOLR_URL"] = "http://index.websolr.com/solr/<api-key>"
+
+  # WEBSOLR_URL must already be defined.
+  require "websolr-sunspot_rails"
+
+== Semantic Versioning
+
+This library obeys the definition of "Semantic Versioning" at http://semver.org/.  YMMV with its dependencies.
 
 == Copyright
 
-Copyright (c) 2010 Kyle Maxwell. See LICENSE for details.
+Copyright (c) 2009 Kyle Maxwell. See LICENSE for details.

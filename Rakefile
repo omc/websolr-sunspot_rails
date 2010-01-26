@@ -10,8 +10,11 @@ begin
     gem.email = "kyle@kylemaxwell.com"
     gem.homepage = "http://github.com/fizx/websolr-sunspot_rails"
     gem.authors = ["Kyle Maxwell"]
-    gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
+    gem.add_dependency "plain_option_parser", ">= 0"
+    gem.add_dependency "sunspot", "=0.10.8"
+    gem.add_dependency "sunspot_rails", "=0.11.5"
+    gem.add_dependency "rest_client"
+    gem.add_development_dependency "rspec", ">= 0"
   end
 rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"

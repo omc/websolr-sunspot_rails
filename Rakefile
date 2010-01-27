@@ -5,15 +5,15 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "websolr-sunspot_rails"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{websolr to sunspot_rails shim}
+    gem.description = %Q{websolr to sunspot_rails shim}
     gem.email = "kyle@kylemaxwell.com"
     gem.homepage = "http://github.com/fizx/websolr-sunspot_rails"
     gem.authors = ["Kyle Maxwell"]
     gem.add_dependency "plain_option_parser", ">= 0"
     gem.add_dependency "sunspot", "=0.10.8"
     gem.add_dependency "sunspot_rails", "=0.11.5"
-    gem.add_dependency "rest_client"
+    gem.add_dependency "rest-client"
     gem.add_development_dependency "rspec", ">= 0"
   end
 rescue LoadError

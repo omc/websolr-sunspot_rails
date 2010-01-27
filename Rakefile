@@ -16,6 +16,7 @@ begin
     gem.add_dependency "rest-client"
     gem.add_development_dependency "rspec", ">= 0"
   end
+  Jeweler::GemcutterTasks.new
 rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"
 end

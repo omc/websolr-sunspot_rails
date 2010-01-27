@@ -71,7 +71,7 @@ if ENV["WEBSOLR_URL"]
     end
   end
   
-  
+  # This code makes saves go though even though solr is down.
   module Sunspot
     module Rails 
       module Searchable

@@ -1,8 +1,3 @@
-require "rubygems"
-gem "sunspot", :version => "0.10.8"
-gem "sunspot_rails", :version => "0.11.5"
-
-# Post-require hooks and sunspot if WEBSOLR_URL is defined.
 if ENV["WEBSOLR_URL"]
   
   CLIENT_KEY = "sunspot-0.10"

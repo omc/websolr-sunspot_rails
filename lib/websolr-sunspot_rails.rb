@@ -1,7 +1,5 @@
 if ENV["WEBSOLR_URL"]
   
-  CLIENT_KEY = "sunspot-0.10"
-  
   require "rest_client"
   require "uri"
   require "sunspot/rails"
@@ -10,10 +8,7 @@ if ENV["WEBSOLR_URL"]
   require "sunspot/rails/request_lifecycle"
   
   api_key = ENV["WEBSOLR_URL"][/[0-9a-f]{11}/] or raise "Invalid WEBSOLR_URL: bad or no api key"
-  print "Setting schema to #{CLIENT_KEY}..."
-  STDOUT.flush
-  RestClient.post("http://www.websolr.com/schema/#{api_key}", :client => CLIENT_KEY)
-  puts "done"
+  RestClient.post("http://www.websolr.com/schema/#{api_key}", :client => "sunspot-0.10")
   
   module Sunspot #:nodoc:
     module Rails #:nodoc:

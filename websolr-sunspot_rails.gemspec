@@ -9,18 +9,18 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Kyle Maxwell"]
-  s.date = %q{2010-01-26}
+  s.date = %q{2010-01-31}
   s.description = %q{websolr to sunspot_rails shim}
   s.email = %q{kyle@kylemaxwell.com}
   s.extra_rdoc_files = [
     "LICENSE",
-     "README.rdoc"
+     "README"
   ]
   s.files = [
     ".document",
      ".gitignore",
      "LICENSE",
-     "README.rdoc",
+     "README",
      "Rakefile",
      "VERSION",
      "lib/websolr-sunspot_rails.rb",
@@ -37,22 +37,16 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<plain_option_parser>, [">= 0"])
-      s.add_runtime_dependency(%q<sunspot>, ["= 0.10.8"])
-      s.add_runtime_dependency(%q<sunspot_rails>, ["= 0.11.5"])
+      s.add_runtime_dependency(%q<sunspot_rails>, ["= 0.11.4"])
       s.add_runtime_dependency(%q<rest-client>, [">= 0"])
       s.add_development_dependency(%q<rspec>, [">= 0"])
     else
-      s.add_dependency(%q<plain_option_parser>, [">= 0"])
-      s.add_dependency(%q<sunspot>, ["= 0.10.8"])
-      s.add_dependency(%q<sunspot_rails>, ["= 0.11.5"])
+      s.add_dependency(%q<sunspot_rails>, ["= 0.11.4"])
       s.add_dependency(%q<rest-client>, [">= 0"])
       s.add_dependency(%q<rspec>, [">= 0"])
     end
   else
-    s.add_dependency(%q<plain_option_parser>, [">= 0"])
-    s.add_dependency(%q<sunspot>, ["= 0.10.8"])
-    s.add_dependency(%q<sunspot_rails>, ["= 0.11.5"])
+    s.add_dependency(%q<sunspot_rails>, ["= 0.11.4"])
     s.add_dependency(%q<rest-client>, [">= 0"])
     s.add_dependency(%q<rspec>, [">= 0"])
   end

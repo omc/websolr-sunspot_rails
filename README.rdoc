@@ -6,10 +6,10 @@ This is the gem to install for the supported version of sunspot_rails on websolr
 
   cd your_rails_app
   sudo gem install websolr-sunspot_rails
-  config.gem "websolr-sunspot_rails"         # into config.environment.rb
-  echo websolr-sunspot_rails >> .gems        # if using Heroku
-  ./script/generate sunspot                  # Installs config/sunspot.yml
-  require 'sunspot/rails/tasks' >> Rakefile  # Installs local development tasks      
+  config.gem "websolr-sunspot_rails"                # into config.environment.rb
+  echo websolr-sunspot_rails >> .gems               # if using Heroku
+  ./script/generate sunspot                         # Installs config/sunspot.yml
+  echo "require 'sunspot/rails/tasks'" >> Rakefile  # Installs local development tasks      
 
 == Usage
 

@@ -1,8 +1,8 @@
-== About ==
+== About
 
 This is the gem to install for the supported version of sunspot_rails on websolr.
 
-== Installation == 
+== Installation
 
   cd your_rails_app
   sudo gem install websolr-sunspot_rails
@@ -12,6 +12,27 @@ This is the gem to install for the supported version of sunspot_rails on websolr
   require 'sunspot/rails/tasks' >> Rakefile  # Installs local development tasks      
 
 == Usage
+
+=== Starting a local development server
+
+To start up a Solr instance for development, issue the following:
+
+  rake sunspot:solr:start
+
+=== Using in production
+
+You need to make sure that the WEBSOLR_URL environment variable is set correctly.  
+
+If you're using Heroku, this should happen automatically.  You can verify by running <code>heroku config</code>.
+
+If you're running in your own environment, set the environment variable as you normally would on a *nix system.
+
+If you have to set the variable in Ruby, you should be able to put the following in an Rails initializer:
+
+  if RAILS_ENV == "production"
+    ENV["WEBSOLR_URL"] = "http://index.websolr.com/solr/[your-api-key]"
+    load "websolr-sunspot_rails.rb"
+  end
 
 === Setup
 

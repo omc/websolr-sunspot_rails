@@ -9,7 +9,7 @@ begin
     gem.description = %Q{websolr to sunspot_rails shim}
     gem.email = "kyle@kylemaxwell.com"
     gem.homepage = "http://github.com/fizx/websolr-sunspot_rails"
-    gem.authors = ["Kyle Maxwell"]
+    gem.authors = ["Kyle Maxwell", "John Barnette", "Mat Brown"]
     gem.add_dependency "sunspot_rails", "0.11.4"
     gem.add_dependency "rest-client"
     gem.add_development_dependency "rspec"

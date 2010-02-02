@@ -5,22 +5,22 @@
 
 Gem::Specification.new do |s|
   s.name = %q{websolr-sunspot_rails}
-  s.version = "0.1.0"
+  s.version = "0.9.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Kyle Maxwell"]
-  s.date = %q{2010-01-31}
+  s.authors = ["Kyle Maxwell", "John Barnette", "Mat Brown"]
+  s.date = %q{2010-02-02}
   s.description = %q{websolr to sunspot_rails shim}
   s.email = %q{kyle@kylemaxwell.com}
   s.extra_rdoc_files = [
     "LICENSE",
-     "README"
+     "README.rdoc"
   ]
   s.files = [
     ".document",
      ".gitignore",
      "LICENSE",
-     "README",
+     "README.rdoc",
      "Rakefile",
      "VERSION",
      "lib/websolr-sunspot_rails.rb",

@@ -1,5 +1,5 @@
 if ENV["WEBSOLR_URL"]
-  
+  require "json"
   require "rest_client"
   require "uri"
   require "sunspot/rails"
@@ -8,7 +8,23 @@ if ENV["WEBSOLR_URL"]
   require "sunspot/rails/request_lifecycle"
   
   api_key = ENV["WEBSOLR_URL"][/[0-9a-f]{11}/] or raise "Invalid WEBSOLR_URL: bad or no api key"
-  RestClient.post("http://www.websolr.com/schema/#{api_key}", :client => "sunspot-0.10")
+  
+  @pending = true
+  Rails.logger.info "Checking index availability"
+  until @pending
+    response = RestClient.post("http://www.websolr.com/schema/#{api_key}.json", :client => "sunspot-0.10")
+    json = JSON.parse(response)
+    case json["status"]
+    when "ok": 
+      Rails.logger.info "Index is available!"
+      @pending = false
+    when "pending": 
+      Rails.logger.info "Provisioning index, please wait ..."
+    when "error"
+      Rails.logger.error json["message"]
+      @pending = false
+    end
+  end
   
   module Sunspot #:nodoc:
     module Rails #:nodoc:

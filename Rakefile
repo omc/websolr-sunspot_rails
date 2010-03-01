@@ -12,6 +12,7 @@ begin
     gem.authors = ["Kyle Maxwell", "John Barnette", "Mat Brown"]
     gem.add_dependency "sunspot_rails", "0.11.4"
     gem.add_dependency "rest-client"
+    gem.add_dependency "json"
     gem.add_development_dependency "rspec"
   end
   Jeweler::GemcutterTasks.new

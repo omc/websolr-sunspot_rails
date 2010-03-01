@@ -9,10 +9,12 @@ if ENV["WEBSOLR_URL"]
   
   api_key = ENV["WEBSOLR_URL"][/[0-9a-f]{11}/] or raise "Invalid WEBSOLR_URL: bad or no api key"
   
+  ENV["WEBSOLR_CONFIG_HOST"] ||= "www.websolr.com"
+  
   @pending = true
-  Rails.logger.info "Checking index availability"
-  until @pending
-    response = RestClient.post("http://www.websolr.com/schema/#{api_key}.json", :client => "sunspot-0.10")
+  Rails.logger.info "Checking index availability..."
+  while @pending
+    response = RestClient.post("http://#{ENV["WEBSOLR_CONFIG_HOST"]}/schema/#{api_key}.json", :client => "sunspot-0.10")
     json = JSON.parse(response)
     case json["status"]
     when "ok": 
@@ -20,11 +22,16 @@ if ENV["WEBSOLR_URL"]
       @pending = false
     when "pending": 
       Rails.logger.info "Provisioning index, please wait ..."
+      sleep 5
     when "error"
       Rails.logger.error json["message"]
       @pending = false
+    else
+      Rails.logger.error "wtf: #{json.inspect}" 
     end
   end
+  Rails.logger.info "Moving on..."
+  
   
   module Sunspot #:nodoc:
     module Rails #:nodoc:

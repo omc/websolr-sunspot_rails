@@ -1,6 +1,6 @@
 == About
 
-This is the gem to install for the supported version of sunspot_rails on websolr.
+This is the gem to install for the supported version of sunspot_rails on websolr.  The version number of this gem will track the sunspot_rails gem version, with an additional number at the end for our patches.  If you install websolr-sunspot_rails 0.11.4.2, that means you got the third (0, 1, 2) release of websolr support for sunspot_rails 0.11.4.
 
 == Installation
 

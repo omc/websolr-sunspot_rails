@@ -15,7 +15,7 @@ if ENV["WEBSOLR_URL"]
   @pending = true
   Rails.logger.info "Checking index availability..."
 
-  response = RestClient.post("http://#{ENV["WEBSOLR_CONFIG_HOST"]}/schema/#{api_key}.json", :client => "sunspot-0.10")
+  response = RestClient.post("http://#{ENV["WEBSOLR_CONFIG_HOST"]}/schema/#{api_key}.json", :client => "sunspot-1.0")
   json = JSON.parse(response)
   case json["status"]
   when "ok"
@@ -87,7 +87,7 @@ if ENV["WEBSOLR_URL"]
     module Rails 
       module Searchable
         module InstanceMethods
-          %w[index index! remove_from_index remove_from_index!].each do |method|
+          %w[solr_index solr_index! solr_remove_from_index solr_remove_from_index!].each do |method|
             new_name = method =~ /!/ ? method.gsub("!", "") + "_with_caught_errors!" : "#{method}_with_caught_errors"
             old_name = new_name.sub("_with_", "_without_")
             define_method(new_name) do

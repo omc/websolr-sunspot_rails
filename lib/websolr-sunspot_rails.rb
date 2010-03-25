@@ -13,22 +13,22 @@ if ENV["WEBSOLR_URL"]
   ENV["WEBSOLR_CONFIG_HOST"] ||= "www.websolr.com"
   
   @pending = true
-  Rails.logger.info "Checking index availability..."
+  puts "Checking index availability..."
 
   response = RestClient.post("http://#{ENV["WEBSOLR_CONFIG_HOST"]}/schema/#{api_key}.json", :client => "sunspot-1.0")
   json = JSON.parse(response)
   case json["status"]
   when "ok"
-    Rails.logger.info "Index is available!"
+    puts "Index is available!"
     @pending = false
   when "pending"
-    Rails.logger.info "Provisioning index, things may not be working for a few seconds ..."
+    puts "Provisioning index, things may not be working for a few seconds ..."
     sleep 5
   when "error"
-    Rails.logger.error json["message"]
+    STDERR.puts json["message"]
     @pending = false
   else
-    Rails.logger.error "wtf: #{json.inspect}" 
+    STDERR.puts "wtf: #{json.inspect}" 
   end
   
   module Sunspot #:nodoc:

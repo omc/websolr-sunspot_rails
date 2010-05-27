@@ -5,7 +5,7 @@ require "sunspot/rails/request_lifecycle"
 
 if ENV["WEBSOLR_URL"]
   require "json"
-  require "rest_client"
+  require "net/http"
   require "uri"
   
   api_key = ENV["WEBSOLR_URL"][/[0-9a-f]{11}/] or raise "Invalid WEBSOLR_URL: bad or no api key"
@@ -13,22 +13,29 @@ if ENV["WEBSOLR_URL"]
   ENV["WEBSOLR_CONFIG_HOST"] ||= "www.websolr.com"
   
   @pending = true
+  json = nil
   puts "Checking index availability..."
+  
+  begin
+    schema_url = URI.parse("http://#{ENV["WEBSOLR_CONFIG_HOST"]}/schema/#{api_key}.json")
+    response = Net::HTTP.post_form(schema_url, :client => "sunspot-1.0")
+    json = JSON.parse(response.to_s)
 
-  response = RestClient.post("http://#{ENV["WEBSOLR_CONFIG_HOST"]}/schema/#{api_key}.json", :client => "sunspot-1.0")
-  json = JSON.parse(response.to_s)
-  case json["status"]
-  when "ok"
-    puts "Index is available!"
-    @pending = false
-  when "pending"
-    puts "Provisioning index, things may not be working for a few seconds ..."
-    sleep 5
-  when "error"
-    STDERR.puts json["message"]
-    @pending = false
-  else
-    STDERR.puts "wtf: #{json.inspect}" 
+    case json["status"]
+    when "ok"
+      puts "Index is available!"
+      @pending = false
+    when "pending"
+      puts "Provisioning index, things may not be working for a few seconds ..."
+      sleep 5
+    when "error"
+      STDERR.puts json["message"]
+      @pending = false
+    else
+      STDERR.puts "wtf: #{json.inspect}" 
+    end
+  rescue Exception => e
+    STDERR.puts "Error checking index status. It may or may not be available.\nPlease email support@onemorecloud.com if this problem persists."
   end
   
   module Sunspot #:nodoc:

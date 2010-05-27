@@ -13,7 +13,6 @@ if ENV["WEBSOLR_URL"]
   ENV["WEBSOLR_CONFIG_HOST"] ||= "www.websolr.com"
   
   @pending = true
-  json = nil
   puts "Checking index availability..."
   
   begin

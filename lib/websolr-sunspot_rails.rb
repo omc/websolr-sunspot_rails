@@ -17,8 +17,8 @@ if ENV["WEBSOLR_URL"]
   
   begin
     schema_url = URI.parse("http://#{ENV["WEBSOLR_CONFIG_HOST"]}/schema/#{api_key}.json")
-    response = Net::HTTP.post_form(schema_url, :client => "sunspot-1.0")
-    json = JSON.parse(response.to_s)
+    response = Net::HTTP.post_form(schema_url, "client" => "sunspot-1.0")
+    json = JSON.parse(response.body.to_s)
 
     case json["status"]
     when "ok"
@@ -35,8 +35,8 @@ if ENV["WEBSOLR_URL"]
     end
   rescue Exception => e
     STDERR.puts "Error checking index status. It may or may not be available.\n" +
-                "Please email support@onemorecloud.com if this problem persists.\n"
-                "#{e.message}"
+                "Please email support@onemorecloud.com if this problem persists.\n" +
+                "Exception: #{e.message}"
   end
   
   module Sunspot #:nodoc:

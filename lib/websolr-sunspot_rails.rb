@@ -3,6 +3,8 @@ require "sunspot/rails/configuration"
 require "sunspot/rails/searchable"
 require "sunspot/rails/request_lifecycle"
 
+require File.join(File.dirname(__FILE__), 'sunspot', 'silent_fail_session_proxy')
+
 if ENV["WEBSOLR_URL"]
   require "json"
   require "net/http"
@@ -90,27 +92,40 @@ if ENV["WEBSOLR_URL"]
     end
   end
   
-  # This code makes saves go though even though solr is down.
-  module Sunspot
-    module Rails 
-      module Searchable
-        module InstanceMethods
-          %w[solr_index solr_index! solr_remove_from_index solr_remove_from_index!].each do |method|
-            new_name = method =~ /!/ ? method.gsub("!", "") + "_with_caught_errors!" : "#{method}_with_caught_errors"
-            old_name = new_name.sub("_with_", "_without_")
-            define_method(new_name) do
-              begin
-                send(old_name)
-              rescue Exception => e
-                logger.error e.message
-                logger.error e.backtrace.join("\n")
-                false
-              end
-            end
-            alias_method_chain method, :caught_errors
+  #
+  # Silently fail instead of raising an exception when an error occurs while writing to Solr.
+  # NOTE: does not fail for reads; you should catch those exceptions, for example in a rescue_from statement.
+  #
+  # To configure, add this to an initializer:
+  #    Sunspot.session = SilentFailSessionProxy.new(session_or_proxy)
+  #
+  # You can get the existing session with Sunspot.send(:session) (it's a private method in Sunspot 0.18, but not 1.0)
+  #
+  # This is for Sunspot 0.18 and would need to be changed a little bit for Sunspot 1.0.
+  #
+  class SilentFailSessionProxy < Sunspot::SessionProxy::AbstractSessionProxy
+
+    attr_reader :session
+    delegate :new_search, :search, :configuration, :to => :session
+
+    [:index, :index!, :commit, :remove, :remove!, :remove_by_id,
+     :remove_by_id!, :remove_all, :remove_all!, :dirty?, :commit_if_dirty, :batch].each do |method|
+      module_eval(<<-RUBY)
+        def #{method}(*args, &block)
+          begin
+            session.#{method}(*args, &block)
+          rescue => e
+            Rails.logger.error(e.message)
           end
         end
-      end
+      RUBY
     end
-  end 
+
+    def initialize(session)
+      @session = session
+    end
+  end
+  
+  Sunspot.session = SilentFailSessionProxy.new(Sunspot.send(:session))
+  
 end

@@ -90,27 +90,45 @@ if ENV["WEBSOLR_URL"]
     end
   end
   
-  # This code makes saves go though even though solr is down.
-  module Sunspot
-    module Rails 
-      module Searchable
-        module InstanceMethods
-          %w[solr_index solr_index! solr_remove_from_index solr_remove_from_index!].each do |method|
-            new_name = method =~ /!/ ? method.gsub("!", "") + "_with_caught_errors!" : "#{method}_with_caught_errors"
-            old_name = new_name.sub("_with_", "_without_")
-            define_method(new_name) do
-              begin
-                send(old_name)
-              rescue Exception => e
-                logger.error e.message
-                logger.error e.backtrace.join("\n")
-                false
-              end
-            end
-            alias_method_chain method, :caught_errors
+  #
+  # Silently fail instead of raising an exception when an error occurs while writing to Solr.
+  # NOTE: does not fail for reads; you should catch those exceptions, for example in a rescue_from statement.
+  #
+  class WebsolrSilentFailSessionProxy < Sunspot::SessionProxy::AbstractSessionProxy
+    attr_reader :search_session
+    
+    delegate :new_search, :search, :config,
+              :new_more_like_this, :more_like_this,
+              :delete_dirty, :delete_dirty?
+              :to => :search_session
+    
+    def initialize(search_session = Sunspot.session)
+      @search_session = search_session
+    end
+    
+    def rescued_exception(method, e)
+      $stderr.puts("Exception in #{method}: #{e.message}")
+    end
+
+    SUPPORTED_METHODS = [
+      :batch, :commit, :commit_if_dirty, :commit_if_delete_dirty, :dirty?,
+      :index!, :index, :remove!, :remove, :remove_all!, :remove_all,
+      :remove_by_id!, :remove_by_id
+    ]
+
+    SUPPORTED_METHODS.each do |method|
+      module_eval(<<-RUBY)
+        def #{method}(*args, &block)
+          begin
+            search_session.#{method}(*args, &block)
+          rescue => e
+            self.rescued_exception(:#{method}, e)
           end
         end
-      end
+      RUBY
     end
-  end 
+  end
+  
+  Sunspot.session = WebsolrSilentFailSessionProxy.new(Sunspot.session)
+  
 end

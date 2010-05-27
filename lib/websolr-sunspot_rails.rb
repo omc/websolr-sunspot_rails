@@ -3,8 +3,6 @@ require "sunspot/rails/configuration"
 require "sunspot/rails/searchable"
 require "sunspot/rails/request_lifecycle"
 
-require File.join(File.dirname(__FILE__), 'sunspot', 'silent_fail_session_proxy')
-
 if ENV["WEBSOLR_URL"]
   require "json"
   require "net/http"

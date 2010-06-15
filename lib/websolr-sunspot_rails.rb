@@ -94,12 +94,13 @@ if ENV["WEBSOLR_URL"]
   # Silently fail instead of raising an exception when an error occurs while writing to Solr.
   # NOTE: does not fail for reads; you should catch those exceptions, for example in a rescue_from statement.
   #
+  require 'sunspot/session_proxy/abstract_session_proxy'
   class WebsolrSilentFailSessionProxy < Sunspot::SessionProxy::AbstractSessionProxy
     attr_reader :search_session
     
     delegate :new_search, :search, :config,
               :new_more_like_this, :more_like_this,
-              :delete_dirty, :delete_dirty?
+              :delete_dirty, :delete_dirty?,
               :to => :search_session
     
     def initialize(search_session = Sunspot.session)

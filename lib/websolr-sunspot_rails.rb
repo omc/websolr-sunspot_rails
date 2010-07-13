@@ -8,8 +8,9 @@ if ENV["WEBSOLR_URL"]
   require "net/http"
   require "uri"
   
-  api_key = ENV["WEBSOLR_URL"][/[0-9a-f]{11}/] or raise "Invalid WEBSOLR_URL: bad or no api key"
+  Sunspot.config.solr.url = ENV["WEBSOLR_URL"]
   
+  api_key = ENV["WEBSOLR_URL"][/[0-9a-f]{11}/] or raise "Invalid WEBSOLR_URL: bad or no api key"
   ENV["WEBSOLR_CONFIG_HOST"] ||= "www.websolr.com"
   
   @pending = true
@@ -37,22 +38,6 @@ if ENV["WEBSOLR_URL"]
     STDERR.puts "Error checking index status. It may or may not be available.\n" +
                 "Please email support@onemorecloud.com if this problem persists.\n" +
                 "Exception: #{e.message}"
-  end
-  
-  module Sunspot #:nodoc:
-    module Rails #:nodoc:
-      class Configuration
-        def hostname
-          URI.parse(ENV["WEBSOLR_URL"]).host
-        end
-        def port
-          URI.parse(ENV["WEBSOLR_URL"]).port
-        end
-        def path
-          URI.parse(ENV["WEBSOLR_URL"]).path
-        end
-      end
-    end
   end
   
   module Sunspot #:nodoc:

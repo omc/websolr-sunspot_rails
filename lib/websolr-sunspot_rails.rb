@@ -42,6 +42,22 @@ if ENV["WEBSOLR_URL"]
   
   module Sunspot #:nodoc:
     module Rails #:nodoc:
+      class Configuration
+        def hostname
+          URI.parse(ENV["WEBSOLR_URL"]).host
+        end
+        def port
+          URI.parse(ENV["WEBSOLR_URL"]).port
+        end
+        def path
+          URI.parse(ENV["WEBSOLR_URL"]).path
+        end
+      end
+    end
+  end
+
+  module Sunspot #:nodoc:
+    module Rails #:nodoc:
       # 
       # This module adds an after_filter to ActionController::Base that commits
       # the Sunspot session if any documents have been added, changed, or removed

@@ -18,7 +18,7 @@ if ENV["WEBSOLR_URL"]
   
   begin
     schema_url = URI.parse("http://#{ENV["WEBSOLR_CONFIG_HOST"]}/schema/#{api_key}.json")
-    response = Net::HTTP.post_form(schema_url, "client" => "sunspot-1.0")
+    response = Net::HTTP.post_form(schema_url, "client" => "sunspot-1.1")
     json = JSON.parse(response.body.to_s)
 
     case json["status"]

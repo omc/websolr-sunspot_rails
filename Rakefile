@@ -1,54 +1,15 @@
-require 'rubygems'
-require 'rake'
+VERSION = File.read(File.join(File.dirname(__FILE__), "VERSION"))
 
-begin
-  require 'jeweler'
-  Jeweler::Tasks.new do |gem|
-    gem.name = "websolr-sunspot_rails"
-    gem.summary = %Q{websolr to sunspot_rails shim}
-    gem.description = %Q{websolr to sunspot_rails shim}
-    gem.email = "kyle@kylemaxwell.com"
-    gem.homepage = "http://github.com/fizx/websolr-sunspot_rails"
-    gem.authors = ["Kyle Maxwell", "John Barnette", "Mat Brown", "Nick Zadrozny"]
-    gem.add_dependency "sunspot_rails", "1.1.0"
-    gem.add_dependency "json"
-    gem.add_development_dependency "rspec"
-  end
-  Jeweler::GemcutterTasks.new
-rescue LoadError
-  puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"
+desc "Build the websolr-sunspot_rails gem for local testing"
+task :build do
+  system "gem build websolr-sunspot_rails.gemspec"
 end
 
-require 'rake/testtask'
-Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/test_*.rb'
-  test.verbose = true
-end
-
-begin
-  require 'rcov/rcovtask'
-  Rcov::RcovTask.new do |test|
-    test.libs << 'test'
-    test.pattern = 'test/**/test_*.rb'
-    test.verbose = true
-  end
-rescue LoadError
-  task :rcov do
-    abort "RCov is not available. In order to run rcov, you must: sudo gem install spicycode-rcov"
-  end
-end
-
-task :test => :check_dependencies
-
-task :default => :test
-
-require 'rake/rdoctask'
-Rake::RDocTask.new do |rdoc|
-  version = File.exist?('VERSION') ? File.read('VERSION') : ""
-
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "websolr-sunspot_rails #{version}"
-  rdoc.rdoc_files.include('README*')
-  rdoc.rdoc_files.include('lib/**/*.rb')
+desc "Release the websolr-sunspot_rails gem"
+task :release => :build do
+  version_tag = "v#{VERSION}"
+  system "git tag -am 'Release version #{VERSION}' '#{version_tag}'"
+  system "git push origin #{version_tag}:#{version_tag}"
+  system "gem push websolr-sunspot_rails-#{VERSION}"
+  FileUtils.rm("websolr-sunspot_rails-#{VERSION}.gem")
 end

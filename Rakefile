@@ -9,7 +9,7 @@ desc "Release the websolr-sunspot_rails gem"
 task :release => :build do
   version_tag = "v#{VERSION}"
   system "git tag -am 'Release version #{VERSION}' '#{version_tag}'"
-  system "git push origin #{version_tag}:#{version_tag}"
-  system "gem push websolr-sunspot_rails-#{VERSION}"
+  system "git push -f origin #{version_tag}:#{version_tag}"
+  system "gem push websolr-sunspot_rails-#{VERSION}.gem"
   FileUtils.rm("websolr-sunspot_rails-#{VERSION}.gem")
 end
